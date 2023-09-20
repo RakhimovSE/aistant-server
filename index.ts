@@ -1,22 +1,45 @@
 import express, { Express, Request, Response } from "express"
 import { graphqlHTTP } from "express-graphql"
 import { buildSchema } from "graphql"
+import fetch from "node-fetch"
 import dotenv from "dotenv"
 
 dotenv.config({ override: true })
 
-// Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
   type Query {
+    user(id: ID!): User
     quoteOfTheDay: String
     random: Float!
     rollThreeDice: [Int]
     rollDice(numDice: Int!, numSides: Int): [Int]
   }
+
+  type User {
+    id: ID!
+    email: String!
+    firstName: String!
+    lastName: String!
+    avatar: String!
+  }
 `)
 
-// The root provides a resolver function for each API endpoint
 var root = {
+  user: async ({ id }) => {
+    try {
+      const res = await fetch(`https://reqres.in/api/users/${id}`)
+      const { data: user } = await res.json()
+      return {
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        avatar: user.email,
+      }
+    } catch {
+      return null
+    }
+  },
   quoteOfTheDay: () => {
     return Math.random() < 0.5 ? "Take it easy" : "Salvation lies within"
   },
