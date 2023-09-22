@@ -3,6 +3,7 @@ import { graphqlHTTP } from "express-graphql"
 import { buildSchema } from "graphql"
 import fetch from "node-fetch"
 import dotenv from "dotenv"
+import cors from "cors"
 
 dotenv.config({ override: true })
 
@@ -59,11 +60,20 @@ var root = {
 }
 
 const app: Express = express()
+const host = process.env.HOSTNAME
 const port = process.env.PORT
+const clientHost = process.env.CLIENT_HOSTNAME
+const clientPort = process.env.CLIENT_PORT
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server is running")
 })
+
+app.use(
+  cors({
+    origin: `http://${clientHost}:${clientPort}`,
+  })
+)
 
 app.use(
   "/graphql",
@@ -75,8 +85,6 @@ app.use(
 )
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`)
-  console.log(
-    `Running a GraphQL API server at http://localhost:${port}/graphql`
-  )
+  console.log(`⚡️[server]: Server is running at http://${host}:${port}`)
+  console.log(`Running a GraphQL API server at http://${host}:${port}/graphql`)
 })
