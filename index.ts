@@ -62,18 +62,12 @@ var root = {
 const app: Express = express()
 const host = process.env.HOSTNAME
 const port = process.env.PORT
-const clientHost = process.env.CLIENT_HOSTNAME
-const clientPort = process.env.CLIENT_PORT
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server is running")
 })
 
-app.use(
-  cors({
-    origin: `http://${clientHost}:${clientPort}`,
-  })
-)
+app.use(cors())
 
 app.use(
   "/graphql",
