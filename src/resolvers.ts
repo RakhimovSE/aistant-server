@@ -1,67 +1,47 @@
-import fetch from "node-fetch"
-import { Book, Resolvers } from "./__generated__/resolvers-types"
+import { Prisma, PrismaClient } from "@prisma/client"
+import { Resolvers } from "./__generated__/resolvers-types"
 
-type ResponseUser = {
-  id: number
-  email: string
-  first_name: string
-  last_name: string
-  avatar: string
-}
-
-const books: Book[] = [
-  {
-    title: "The Awakening",
-    author: "Kate Chopin",
-  },
-  {
-    title: "City of Glass",
-    author: "Paul Auster",
-  },
-]
+const prisma = new PrismaClient()
 
 export const resolvers: Resolvers = {
   Query: {
     user: async (_, { id }) => {
-      try {
-        const res = await fetch(`https://reqres.in/api/users/${id}`)
-        const { data: user } = (await res.json()) as { data: ResponseUser }
-        return {
-          id: String(user.id),
-          email: user.email,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          avatar: user.avatar,
-        }
-      } catch {
-        return null
-      }
+      const user = await prisma.user.findUnique({ where: { id: Number(id) } })
+      return user ? { ...user, id: String(user.id) } : null
     },
-    quoteOfTheDay: () => {
-      return Math.random() < 0.5 ? "Take it easy" : "Salvation lies within"
-    },
-    random: () => {
-      return Math.random()
-    },
-    rollThreeDice: () => {
-      return [1, 2, 3].map((_) => 1 + Math.floor(Math.random() * 6))
-    },
-    rollDice: (_, { numDice, numSides }) => {
-      var output = []
-      for (var i = 0; i < numDice; i++) {
-        output.push(1 + Math.floor(Math.random() * (numSides || 6)))
-      }
-      return output
-    },
-    books: () => books,
   },
   Mutation: {
-    addUser: (parent, args, context, info) => {
-      console.log(parent, args, context, info)
+    addUser: async (_, args) => {
+      const user = await prisma.user.create({
+        data: {
+          email: args.email,
+          firstName: args.firstName,
+          lastName: args.lastName,
+          avatar: args.avatar,
+        },
+      })
       return {
-        code: "301",
-        success: false,
-        message: "Not implemented",
+        code: "200",
+        success: true,
+        message: "User created successfully",
+        user: { ...user, id: String(user.id) },
+      }
+    },
+    updateUser: async (_, { id, ...args }) => {
+      const data: Prisma.UserUpdateInput = {}
+      if (args.email) data.email = args.email
+      if (args.firstName) data.firstName = args.firstName
+      if (args.lastName) data.lastName = args.lastName
+      if (args.avatar) data.avatar = args.avatar
+      const user = await prisma.user.update({
+        where: { id: Number(id) },
+        data: data,
+      })
+      return {
+        code: "200",
+        success: true,
+        message: "User updated successfully",
+        user: { ...user, id: String(user.id) },
       }
     },
   },

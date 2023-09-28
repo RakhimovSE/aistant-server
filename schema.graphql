@@ -23,6 +23,13 @@ type AddUserMutationResponse implements MutationResponse {
   user: User
 }
 
+type UpdateUserMutationResponse implements MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  user: User
+}
+
 # Query
 
 type Query {
@@ -38,4 +45,11 @@ type Mutation {
     lastName: String!
     avatar: String
   ): AddUserMutationResponse
+  updateUser(
+    id: ID!
+    email: String
+    firstName: String
+    lastName: String
+    avatar: String
+  ): UpdateUserMutationResponse
 }

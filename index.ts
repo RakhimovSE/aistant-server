@@ -7,7 +7,8 @@ import http from "http"
 import cors from "cors"
 import bodyParser from "body-parser"
 import { readFileSync } from "fs"
-import { resolvers } from "./src/resolvers"
+
+import { resolvers } from "./src/resolvers.js"
 
 dotenv.config({ override: true })
 const host = process.env.HOSTNAME
