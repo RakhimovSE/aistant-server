@@ -1,5 +1,5 @@
 import fetch from "node-fetch"
-import { Book, Resolvers } from "./__generated__/resolvers-types.js"
+import { Book, Resolvers } from "./__generated__/resolvers-types"
 
 type ResponseUser = {
   id: number
