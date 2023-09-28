@@ -23,29 +23,19 @@ type AddUserMutationResponse implements MutationResponse {
   user: User
 }
 
-type Mutation {
-  addUser(
-    email: String
-    firstName: String
-    lastName: String
-    avatar: String
-  ): AddUserMutationResponse
-}
-
-# Book
-
-type Book {
-  title: String
-  author: String
-}
-
 # Query
 
 type Query {
   user(id: ID!): User
-  quoteOfTheDay: String
-  random: Float!
-  rollThreeDice: [Int]
-  rollDice(numDice: Int!, numSides: Int): [Int]
-  books: [Book]
+}
+
+# Mutation
+
+type Mutation {
+  addUser(
+    email: String!
+    firstName: String!
+    lastName: String!
+    avatar: String
+  ): AddUserMutationResponse
 }
