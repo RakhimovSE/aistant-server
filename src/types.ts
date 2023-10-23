@@ -1,6 +1,6 @@
 import { User } from "@prisma/client"
 
-export type UserPayload = {
+export type AccessTokenPayload = {
   id: User["id"]
   email: User["email"]
   firstName: User["firstName"]
@@ -9,6 +9,11 @@ export type UserPayload = {
   avatar: User["avatar"]
 }
 
+export type RefreshTokenPayload = {
+  userId: User["id"]
+  jti: string
+}
+
 export interface AistantApolloContext {
-  user?: UserPayload
+  user?: AccessTokenPayload
 }
