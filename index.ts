@@ -23,12 +23,12 @@ const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" })
 
 const apolloContext: ExpressMiddlewareOptions<AistantApolloContext>["context"] =
   async ({ req }) => {
-    const token = req.headers.authorization?.split("Bearer ")[1]
-
-    if (!token) {
+    const tokenMatchArray = req.headers.authorization?.match(/^Bearer\s(.+)$/)
+    if (!tokenMatchArray || tokenMatchArray.length !== 2) {
       return { user: undefined }
     }
 
+    const token = tokenMatchArray[1]
     try {
       const user = jwt.verify(
         token,
