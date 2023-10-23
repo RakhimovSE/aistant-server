@@ -1,20 +1,16 @@
-# General
-
-interface MutationResponse {
-  code: String!
-  success: Boolean!
-  message: String!
+input SignInInput {
+  email: String!
+  password: String!
 }
 
-# User
+type SignInQueryResponse {
+  accessToken: String!
+  refreshToken: String!
+}
 
-type User {
-  id: ID!
-  email: String!
-  firstName: String!
-  lastName: String!
-  emailVerifiedAt: Int
-  avatar: String
+type ReissueTokenQueryResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 input SignUpInput {
@@ -25,42 +21,24 @@ input SignUpInput {
   avatar: String
 }
 
-type SignInQueryResponse {
+type SignUpMutationResponse {
   accessToken: String!
   refreshToken: String!
 }
 
-type SignUpMutationResponse implements MutationResponse {
-  code: String!
-  success: Boolean!
-  message: String!
-  accessToken: String!
-  refreshToken: String!
-}
-
-type RefreshTokenMutationResponse implements MutationResponse {
-  code: String!
-  success: Boolean!
-  message: String!
-  accessToken: String!
-  refreshToken: String!
-}
-
-input SignInInput {
-  email: String!
-  password: String!
-}
-
-# Query
+##################################
+# Query                          #
+##################################
 
 type Query {
-  me: User
   signIn(input: SignInInput!): SignInQueryResponse
+  reissueToken(refreshToken: String!): ReissueTokenQueryResponse
 }
 
-# Mutation
+##################################
+# Mutation                       #
+##################################
 
 type Mutation {
   signUp(input: SignUpInput!): SignUpMutationResponse
-  refreshToken(refreshToken: String!): RefreshTokenMutationResponse
 }
