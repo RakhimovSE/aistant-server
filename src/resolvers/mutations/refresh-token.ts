@@ -31,7 +31,7 @@ const refreshToken: MutationResolvers<AistantApolloContext>["refreshToken"] =
       throw new UserNotFoundError()
     }
 
-    await prisma.deleteRefreshToken(savedRefreshToken.id)
+    await prisma.revokeToken(savedRefreshToken.id)
     const { accessToken, refreshToken: newRefreshToken } =
       await prisma.createTokens(user)
 

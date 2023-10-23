@@ -49,7 +49,7 @@ class AistantPrismaClient extends PrismaClient {
     return await this.refreshToken.findUnique({ where: { id } })
   }
 
-  async deleteRefreshToken(id: RefreshToken["id"]) {
+  async revokeToken(id: RefreshToken["id"]) {
     return await this.refreshToken.update({
       where: { id },
       data: { revoked: true },
