@@ -1,9 +1,6 @@
 import { QueryResolvers } from "../../__generated__/resolvers-types"
 
-import {
-  NotAuthenticatedError,
-  UserNotFoundError,
-} from "../../utils/errors/index.js"
+import { UnauthorizedError } from "../../utils/errors/index.js"
 import { AistantApolloContext } from "../../types.js"
 import prisma from "../client.js"
 
@@ -13,11 +10,11 @@ const me: QueryResolvers<AistantApolloContext>["me"] = async (
   { user: userContext }
 ) => {
   if (!userContext) {
-    throw new NotAuthenticatedError()
+    throw new UnauthorizedError()
   }
   const user = await prisma.findUser({ id: userContext.id })
   if (!user) {
-    throw new UserNotFoundError()
+    throw new UnauthorizedError()
   }
   return {
     id: String(user.id),

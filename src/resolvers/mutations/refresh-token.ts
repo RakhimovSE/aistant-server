@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { MutationResolvers } from "../../__generated__/resolvers-types"
 import {
   InvalidRefreshTokenError,
-  UserNotFoundError,
+  UnauthorizedError,
 } from "../../utils/errors/index.js"
 import { AistantApolloContext, RefreshTokenPayload } from "../../types.js"
 import prisma from "../client.js"
@@ -28,7 +28,7 @@ const refreshToken: MutationResolvers<AistantApolloContext>["refreshToken"] =
 
     const user = await prisma.findUser({ id: payload.userId })
     if (!user) {
-      throw new UserNotFoundError()
+      throw new UnauthorizedError()
     }
 
     await prisma.revokeToken(savedRefreshToken.id)
