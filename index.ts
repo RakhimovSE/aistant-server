@@ -12,7 +12,7 @@ import cors from "cors"
 import bodyParser from "body-parser"
 import { readFileSync } from "fs"
 
-import { AistantApolloContext, UserPayload } from "./src/types.js"
+import { AistantApolloContext, AccessTokenPayload } from "./src/types.js"
 import { resolvers } from "./src/resolvers/index.js"
 
 dotenv.config({ override: true })
@@ -33,7 +33,7 @@ const apolloContext: ExpressMiddlewareOptions<AistantApolloContext>["context"] =
       const user = jwt.verify(
         token,
         process.env.JWT_ACCESS_SECRET as string
-      ) as UserPayload
+      ) as AccessTokenPayload
       return { user }
     } catch {
       return { user: undefined }
