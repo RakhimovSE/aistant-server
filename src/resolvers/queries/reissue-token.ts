@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-import { MutationResolvers } from "../../__generated__/resolvers-types"
+import { QueryResolvers } from "../../__generated__/resolvers-types"
 import {
   InvalidRefreshTokenError,
   UnauthorizedError,
@@ -9,7 +9,7 @@ import { AistantApolloContext, RefreshTokenPayload } from "../../types.js"
 import prisma from "../client.js"
 import { hashToken } from "../../utils/jwt.js"
 
-const refreshToken: MutationResolvers<AistantApolloContext>["refreshToken"] =
+const reissueToken: QueryResolvers<AistantApolloContext>["reissueToken"] =
   async (_, { refreshToken }) => {
     const payload = jwt.verify(
       refreshToken,
@@ -36,12 +36,9 @@ const refreshToken: MutationResolvers<AistantApolloContext>["refreshToken"] =
       await prisma.createTokens(user)
 
     return {
-      code: "200",
-      success: true,
-      message: "Issued new access and refresh tokens successfully",
       accessToken,
       refreshToken: newRefreshToken,
     }
   }
 
-export default refreshToken
+export default reissueToken

@@ -23,9 +23,6 @@ const signUp: MutationResolvers<AistantApolloContext>["signUp"] = async (
   const { accessToken, refreshToken } = await prisma.createTokens(user)
 
   return {
-    code: "200",
-    success: true,
-    message: "User successfully created",
     accessToken: accessToken,
     refreshToken: refreshToken,
   }
