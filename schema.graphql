@@ -13,43 +13,45 @@ type User {
   email: String!
   firstName: String!
   lastName: String!
+  emailVerifiedAt: Int
   avatar: String
 }
 
-type AddUserMutationResponse implements MutationResponse {
-  code: String!
-  success: Boolean!
-  message: String!
-  user: User
+input SignUpInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  avatar: String
 }
 
-type UpdateUserMutationResponse implements MutationResponse {
+type SignInQueryResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type SignUpMutationResponse implements MutationResponse {
   code: String!
   success: Boolean!
   message: String!
-  user: User
+  accessToken: String!
+  refreshToken: String!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
 }
 
 # Query
 
 type Query {
-  user(id: ID!): User
+  me: User
+  signIn(input: SignInInput!): SignInQueryResponse
 }
 
 # Mutation
 
 type Mutation {
-  addUser(
-    email: String!
-    firstName: String!
-    lastName: String!
-    avatar: String
-  ): AddUserMutationResponse
-  updateUser(
-    id: ID!
-    email: String
-    firstName: String
-    lastName: String
-    avatar: String
-  ): UpdateUserMutationResponse
+  signUp(input: SignUpInput!): SignUpMutationResponse
 }
