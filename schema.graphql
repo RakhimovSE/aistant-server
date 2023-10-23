@@ -38,6 +38,14 @@ type SignUpMutationResponse implements MutationResponse {
   refreshToken: String!
 }
 
+type RefreshTokenMutationResponse implements MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
 input SignInInput {
   email: String!
   password: String!
@@ -54,4 +62,5 @@ type Query {
 
 type Mutation {
   signUp(input: SignUpInput!): SignUpMutationResponse
+  refreshToken(refreshToken: String!): RefreshTokenMutationResponse
 }
